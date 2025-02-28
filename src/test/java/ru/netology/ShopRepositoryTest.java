@@ -11,18 +11,8 @@ class ShopRepositoryTest {
     Product product3 = new Product(6, "Масло", 300);
 
     @Test
-    void findById() {
-        ShopRepository repo = new ShopRepository();
-
-        repo.add(product1);
-        repo.add(product2);
-        repo.add(product3);
-
-        assertEquals(product3, repo.findById(6));
-    }
-
-    @Test
-    void remove() {
+        // обязательный тест задания 1
+    void removeWithNotFoundId() {
         ShopRepository repo = new ShopRepository();
         repo.add(product1);
         repo.add(product2);
@@ -34,15 +24,37 @@ class ShopRepositoryTest {
     }
 
     @Test
+        // обязательный тест задания 1
     void removeWithNull() {
         ShopRepository repo = new ShopRepository();
         repo.add(product1);
         repo.add(product2);
         repo.add(product3);
 
-        Assertions.assertThrows(NotFoundException.class, () -> {
-            repo.remove(123);
-        });
+        Assertions.assertThrows(NotFoundException.class, () -> repo.remove(123));
+    }
+
+    @Test
+// обязательный тест задания 2
+    void addFoundId() {
+        ShopRepository repo = new ShopRepository();
+        repo.add(product1);
+        repo.add(product2);
+        repo.add(product3);
+
+        assertEquals(product3, repo.findById(6));
+    }
+
+    @Test
+// обязательный тест задания 2
+    void addFoundWithExistId() {
+        ShopRepository repo = new ShopRepository();
+        Product product4 = new Product(12, "Чипсы", 30);
+        repo.add(product1);
+        repo.add(product2);
+        repo.add(product3);
+
+        Assertions.assertThrows(AlreadyExistsException.class, () -> repo.add(product4));
     }
 
     @Test
@@ -68,27 +80,29 @@ class ShopRepositoryTest {
     @Test
     void testEquals() {
         Product product = new Product(1, "a", 10);
-        Object o = null;
 
-        assertFalse(product.equals(o));
+        Assertions.assertNotEquals(null, product);
     }
 
     @Test
     void testEqualsDifferentClass() {
         Product product = new Product(1, "a", 10);
-        String[] feeling = new String[0];
-        assertNotEquals(product, feeling);
+        String feeling = "1, s, 20";
+
+        assertNotEquals(feeling, product);
     }
 
     @Test
     public void testEqualsNull() {
         Product product = new Product(1, "Молоко", 10);
-        Assertions.assertNotEquals(product, null);
+
+        Assertions.assertNotEquals(null, product);
     }
 
     @Test
     public void testEqualsSameInstance() {
         Product product = new Product(1, "Молоко", 10);
+
         Assertions.assertTrue(product.equals(product));
     }
 
@@ -96,7 +110,10 @@ class ShopRepositoryTest {
     public void testEqualsIdenticalObjects() {
         Product product1 = new Product(1, "Молоко", 100);
         Product product2 = new Product(1, "Молоко", 100);
+
         assertEquals(product1, product2);
     }
 }
+
+
 
